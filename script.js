@@ -10,19 +10,14 @@ const playingTitleEl = document.querySelector('.song');
 
 let isPlaying = false;
 let searchResult = [];
-let selectedSong = '';
+let inputSearchField = '';
 let token = '';
-let data = '';
 
-let playingAlbumArt = '';
-let playingArtist = '';
-let playingTitle = '';
-
-// Sök fältet
+// Sökfältet
 btnSearch.addEventListener('click', async () => {
   removeSearchResults();
   await getToken();
-  selectedSong = inputField.value;
+  inputSearchField = inputField.value;
   searchSong();
 });
 
@@ -39,13 +34,11 @@ btnPlayPause.addEventListener('click', () => {
   }
 });
 
-// Play song from searchresults.
+// Starta låt från sökresultat.
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('btn__playsong')) {
     let songId = e.target.dataset['id'];
     displaySongDetails(songId);
-    console.log(searchResult[songId].artists[0].name);
-
     musicPlayer.load();
     musicPlayer.play();
     btnPlayPause.textContent = 'Pause';
@@ -64,7 +57,7 @@ async function getToken() {
 
 async function searchSong() {
   const response = await fetch(
-    `https://api.spotify.com/v1/search?q=track%3A${selectedSong}&type=track&limit=5`,
+    `https://api.spotify.com/v1/search?q=track%3A${inputSearchField}&type=track&limit=5`,
     {
       headers: {
         Accept: 'application / json',
