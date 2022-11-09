@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Musikspelare</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <nav class="searchbar">
+        <input
+          class="search__field"
+          placeholder="Search for tracks"
+        />
+        <button class="button__search">
+          <img src="/images/magnify.png" />
+        </button>
+      </nav>
+
+      <article class="search__result"></article>
+
+      <!-- Gör om senare -->
+      <section class="mediaplayer__container">
+        <article class="mediaplayer__albumart">
+          <img
+            class="albumart__img"
+            src="images/default_album_cover.png"
+            alt=""
+          />
+        </article>
+        <article class="player__container">
+          <h1 class="song">Song Title</h1>
+          <h2 class="artist">Artist</h2>
+          <audio class="music_player">
+            <source src="" type="audio/mpeg" />
+          </audio>
+          <button class="btn--playpause">Play</button>
+          <!-- <button class="btn--play"></button> -->
+        </article>
+      </section>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
