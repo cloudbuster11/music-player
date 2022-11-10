@@ -7,9 +7,17 @@ const musicPlayerSrc = document.querySelector('source');
 const playingAlbumArtEl = document.querySelector('.albumart__img');
 const playingArtistEl = document.querySelector('.artist');
 const playingTitleEl = document.querySelector('.song');
+const volumeUpBtn = document.querySelector('.volumeup');
+const volumeDownBtn = document.querySelector('.volumedown');
+const volumeEl = document.querySelector('.show__volume');
+const musicPlayerContainer = document.querySelector(
+  '.player__container'
+);
 let currentTimeEl = document.querySelector('.current__time');
 let totalTimeEl = document.querySelector('.total__time');
-
+volumeEl.textContent = `Volume: ${Math.floor(
+  musicPlayer.volume * 10
+)}`;
 let currentPlayTime;
 let totalPlayTime;
 let timer = 0;
@@ -51,6 +59,25 @@ document.addEventListener('click', async function (e) {
     startTimer();
     btnPlayPause.textContent = 'Pause';
     isPlaying = true;
+  }
+});
+
+// Volym (Ska slås ihop med play/pause eventlistner med hjälp av bubbling event senare.)
+musicPlayerContainer.addEventListener('click', (e) => {
+  if (e.target.classList.contains('volumeup')) {
+    if (musicPlayer.volume < 1.0) {
+      musicPlayer.volume = musicPlayer.volume + 0.1;
+      volumeEl.textContent = `Volume: ${Math.floor(
+        musicPlayer.volume * 10
+      )}`;
+    } else return;
+  } else if (e.target.classList.contains('volumedown')) {
+    if (musicPlayer.volume > 0.01) {
+      musicPlayer.volume = musicPlayer.volume - 0.1;
+      volumeEl.textContent = `Volume: ${Math.floor(
+        musicPlayer.volume * 10
+      )}`;
+    } else return;
   }
 });
 
@@ -107,6 +134,10 @@ function displaySongDetails(songId) {
   playingArtistEl.textContent = searchResult[songId].artists[0].name;
   playingTitleEl.textContent = searchResult[songId].name;
   playingAlbumArtEl.src = searchResult[songId].album.images[1].url;
+}
+
+function volumeControl() {
+  console.log(musicPlayer.volume);
 }
 
 function updateTimer() {
