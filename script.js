@@ -12,6 +12,7 @@ let totalTimeEl = document.querySelector('.total__time');
 
 let currentPlayTime;
 let totalPlayTime;
+let timer = 0;
 let isPlaying = false;
 let searchResult = [];
 let inputSearchField = '';
@@ -44,13 +45,10 @@ document.addEventListener('click', async function (e) {
     let songId = e.target.dataset['id'];
     displaySongDetails(songId);
     musicPlayer.load();
-    // musicPlayer.duration;
     await musicPlayer.play();
-    totalTimeEl.textContent = Math.round(musicPlayer.duration);
-    console.log(musicPlayer.duration);
-    currentPlayTime = Math.round(musicPlayer.currentTime);
-    console.log(currentPlayTime);
-    currentTimeEl.textContent = currentPlayTime;
+    totalPlayTime = Math.round(musicPlayer.duration);
+    totalTimeEl.textContent = totalPlayTime;
+    startTimer();
     btnPlayPause.textContent = 'Pause';
     isPlaying = true;
   }
@@ -109,4 +107,14 @@ function displaySongDetails(songId) {
   playingArtistEl.textContent = searchResult[songId].artists[0].name;
   playingTitleEl.textContent = searchResult[songId].name;
   playingAlbumArtEl.src = searchResult[songId].album.images[1].url;
+}
+
+function updateTimer() {
+  currentPlayTime = Math.round(musicPlayer.currentTime);
+  currentTimeEl.textContent = currentPlayTime;
+}
+
+function startTimer() {
+  timer = setInterval(updateTimer, 1000);
+  updateTimer();
 }
