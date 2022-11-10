@@ -7,7 +7,11 @@ const musicPlayerSrc = document.querySelector('source');
 const playingAlbumArtEl = document.querySelector('.albumart__img');
 const playingArtistEl = document.querySelector('.artist');
 const playingTitleEl = document.querySelector('.song');
+let currentTimeEl = document.querySelector('.current__time');
+let totalTimeEl = document.querySelector('.total__time');
 
+let currentPlayTime;
+let totalPlayTime;
 let isPlaying = false;
 let searchResult = [];
 let inputSearchField = '';
@@ -35,12 +39,18 @@ btnPlayPause.addEventListener('click', () => {
 });
 
 // Starta låt från sökresultat.
-document.addEventListener('click', function (e) {
+document.addEventListener('click', async function (e) {
   if (e.target.classList.contains('btn__playsong')) {
     let songId = e.target.dataset['id'];
     displaySongDetails(songId);
     musicPlayer.load();
-    musicPlayer.play();
+    // musicPlayer.duration;
+    await musicPlayer.play();
+    totalTimeEl.textContent = Math.round(musicPlayer.duration);
+    console.log(musicPlayer.duration);
+    currentPlayTime = Math.round(musicPlayer.currentTime);
+    console.log(currentPlayTime);
+    currentTimeEl.textContent = currentPlayTime;
     btnPlayPause.textContent = 'Pause';
     isPlaying = true;
   }
