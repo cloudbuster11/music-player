@@ -92,7 +92,7 @@ async function getToken() {
 
 async function searchSong() {
   const response = await fetch(
-    `https://api.spotify.com/v1/search?q=track%3A${inputSearchField}&type=track&limit=5`,
+    `https://api.spotify.com/v1/search?q=track%3A${inputSearchField}&type=track&limit=10`,
     {
       headers: {
         Accept: 'application / json',
@@ -103,6 +103,7 @@ async function searchSong() {
   );
   data = await response.json();
   searchResult = data.tracks.items;
+  console.log(searchResult);
   displaySearchResults();
   return;
 }
@@ -110,10 +111,11 @@ async function searchSong() {
 function displaySearchResults() {
   for (let i = 0; i < searchResult.length; i++) {
     const renderArtist = `<article class="result__container ${i}">
-    <h3 class="result__artist">${searchResult[i].artists[0].name}</h3>
+    <h4 class="result__artist">${searchResult[i].artists[0].name}</h4>
     <p class="result__songtitle">${searchResult[i].name}</p>
+    <p class="result__albumname">${searchResult[i].album.name}</p>
     <img class="result__albumcover" src="${searchResult[i].album.images[1].url}"/>
-    <button class="btn__playsong" data-id="${i}">Play Song</button>
+    <button class="btn__playsong btn__result" data-id="${i}">Play Song</button> <button class="btn__quesong btn__result">Que Song</button>
     </article>`;
     searchResultEl.innerHTML += renderArtist;
   }
