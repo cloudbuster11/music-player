@@ -1,3 +1,5 @@
+// Fortsätt på rad 133. Bugg. Quelist.
+
 const searchResultEl = document.querySelector('.search__result');
 const inputField = document.querySelector('.search__field');
 const btnSearch = document.querySelector('.button__search');
@@ -5,6 +7,9 @@ const btnPlayPause = document.querySelector('.btn--playpause');
 const musicPlayer = document.querySelector('.music_player');
 const musicPlayerSrc = document.querySelector('source');
 const playingAlbumArtEl = document.querySelector('.albumart__img');
+const addToQueueBtn = document.querySelector('.btn__queuesong');
+const queueListEl = document.querySelector('.queue__list');
+
 const playingArtistEl = document.querySelector('.artist');
 const playingTitleEl = document.querySelector('.song');
 const volumeUpBtn = document.querySelector('.volumeup');
@@ -12,6 +17,9 @@ const volumeDownBtn = document.querySelector('.volumedown');
 const volumeEl = document.querySelector('.show__volume');
 const musicPlayerContainer = document.querySelector(
   '.player__container'
+);
+const mediaPlayerCont = document.querySelector(
+  '.mediaplayer__container'
 );
 let currentTimeEl = document.querySelector('.current__time');
 let totalTimeEl = document.querySelector('.total__time');
@@ -25,6 +33,7 @@ let isPlaying = false;
 let searchResult = [];
 let inputSearchField = '';
 let token = '';
+let queueList = [];
 
 // Sökfältet
 btnSearch.addEventListener('click', async () => {
@@ -36,6 +45,7 @@ btnSearch.addEventListener('click', async () => {
 
 // Play/Pause Mediaplayer
 btnPlayPause.addEventListener('click', () => {
+  playSongFromSearchResults();
   if (!isPlaying) {
     musicPlayer.play();
     isPlaying = true;
@@ -47,7 +57,7 @@ btnPlayPause.addEventListener('click', () => {
   }
 });
 
-// Starta låt från sökresultat.
+// Starta låt från sökresultat eller queue.
 document.addEventListener('click', async function (e) {
   if (e.target.classList.contains('btn__playsong')) {
     let songId = e.target.dataset['id'];
@@ -59,26 +69,14 @@ document.addEventListener('click', async function (e) {
     startTimer();
     btnPlayPause.textContent = 'Pause';
     isPlaying = true;
+  } else if (e.target.classList.contains('btn__queuesong')) {
+    addToQueue(e.target.dataset['id']);
   }
 });
 
 // Volym (Ska slås ihop med play/pause eventlistner med hjälp av bubbling event senare.)
-musicPlayerContainer.addEventListener('click', (e) => {
-  if (e.target.classList.contains('volumeup')) {
-    if (musicPlayer.volume < 1.0) {
-      musicPlayer.volume = musicPlayer.volume + 0.1;
-      volumeEl.textContent = `Volume: ${Math.floor(
-        musicPlayer.volume * 10
-      )}`;
-    } else return;
-  } else if (e.target.classList.contains('volumedown')) {
-    if (musicPlayer.volume > 0.01) {
-      musicPlayer.volume = musicPlayer.volume - 0.1;
-      volumeEl.textContent = `Volume: ${Math.floor(
-        musicPlayer.volume * 10
-      )}`;
-    } else return;
-  }
+mediaPlayerCont.addEventListener('click', (e) => {
+  volumeControl(e);
 });
 
 async function getToken() {
@@ -115,7 +113,7 @@ function displaySearchResults() {
     <p class="result__songtitle">${searchResult[i].name}</p>
     <p class="result__albumname">${searchResult[i].album.name}</p>
     <img class="result__albumcover" src="${searchResult[i].album.images[1].url}"/>
-    <button class="btn__playsong btn__result" data-id="${i}">Play Song</button> <button class="btn__quesong btn__result">Que Song</button>
+    <button class="btn__playsong btn__result" data-id="${i}">Play Song</button><button class="btn__queuesong btn__result" data-id="${i}">Queue</button>
     </article>`;
     searchResultEl.innerHTML += renderArtist;
   }
@@ -131,15 +129,54 @@ function removeSearchResults() {
   });
 }
 
+function playSongFromSearchResults() {}
+
 function displaySongDetails(songId) {
   musicPlayerSrc.src = searchResult[songId].preview_url;
   playingArtistEl.textContent = searchResult[songId].artists[0].name;
   playingTitleEl.textContent = searchResult[songId].name;
   playingAlbumArtEl.src = searchResult[songId].album.images[1].url;
 }
+// Måste hitta annan lösning på nedan
+let queueIndex = 0;
 
-function volumeControl() {
-  console.log(musicPlayer.volume);
+function addToQueue(songIndex) {
+  console.log(songIndex);
+  // queueList.push(searchResult[songIndex]);
+  queueList.push(searchResult[songIndex]);
+  console.log(queueList);
+  displayQueue(queueIndex);
+  queueIndex++;
+  console.log(queueIndex);
+  return;
+}
+
+function displayQueue(songIndex) {
+  console.log(songIndex);
+  let renderQueue = `<article class="queue__container ${songIndex}">
+    <h4 class="queue__artist">${queueList[songIndex].artists[0].name}</h4>
+    <p class="queue__songtitle">${queueList[songIndex].name}</p>
+    <button class="btn__playsong btn__result" data-id="${songIndex}">Play Song</button>
+    </article>`;
+  queueListEl.innerHTML += renderQueue;
+}
+
+function volumeControl(e) {
+  if (e.target.classList.contains('volumeup')) {
+    if (musicPlayer.volume < 1.0) {
+      musicPlayer.volume = musicPlayer.volume + 0.1;
+      volumeEl.textContent = `Volume: ${Math.floor(
+        musicPlayer.volume * 10
+      )}`;
+    } else return;
+  } else if (e.target.classList.contains('volumedown')) {
+    if (musicPlayer.volume > 0.01) {
+      musicPlayer.volume = musicPlayer.volume - 0.1;
+      volumeEl.textContent = `Volume: ${Math.floor(
+        musicPlayer.volume * 10
+      )}`;
+    } else return;
+  }
 }
 
 function updateTimer() {

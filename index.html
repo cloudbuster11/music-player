@@ -23,13 +23,14 @@
       </nav>
 
       <article class="search__result"></article>
+      <article class="queue__list"></article>
 
       <!-- Gör om senare -->
       <section class="mediaplayer__container">
         <article class="mediaplayer__albumart">
           <img
             class="albumart__img"
-            src="images/default_album_cover.png"
+            src="images/default_album_cover.jpg"
             alt=""
           />
           <section class="artist__info">
@@ -44,15 +45,20 @@
               <p class="show__volume">10</p>
             </aside>
           </section>
+          <aside class="volume__controlls">
+            <button class="volumeup btn--volume">+</button>
+            <button class="volumedown btn--volume">-</button>
+          </aside>
         </article>
 
         <article class="player__container">
           <audio class="music_player">
             <source src="" type="audio/mpeg" />
           </audio>
-          <button class="volumedown btn--volume">-</button>
+          <button class="btn--prev btn--grey">Prev</button>
           <button class="btn--playpause">Play</button>
-          <button class="volumeup btn--volume">+</button>
+          <button class="btn--next btn--grey">Next</button>
+
           <!-- <button class="btn--play"></button> -->
         </article>
       </section>
