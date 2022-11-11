@@ -1,5 +1,3 @@
-// Fortsätt på rad 133. Bugg. Quelist.
-
 const searchResultEl = document.querySelector('.search__result');
 const inputField = document.querySelector('.search__field');
 const btnSearch = document.querySelector('.button__search');
@@ -23,9 +21,7 @@ const mediaPlayerCont = document.querySelector(
 );
 let currentTimeEl = document.querySelector('.current__time');
 let totalTimeEl = document.querySelector('.total__time');
-volumeEl.textContent = `Volume: ${Math.floor(
-  musicPlayer.volume * 10
-)}`;
+
 let currentPlayTime;
 let totalPlayTime;
 let timer = 0;
@@ -34,6 +30,10 @@ let searchResult = [];
 let inputSearchField = '';
 let token = '';
 let queueList = [];
+
+volumeEl.textContent = `Volume: ${Math.floor(
+  musicPlayer.volume * 10
+)}`;
 
 // Sökfältet
 btnSearch.addEventListener('click', async () => {
@@ -45,33 +45,12 @@ btnSearch.addEventListener('click', async () => {
 
 // Play/Pause Mediaplayer
 btnPlayPause.addEventListener('click', () => {
-  playSongFromSearchResults();
-  if (!isPlaying) {
-    musicPlayer.play();
-    isPlaying = true;
-    btnPlayPause.textContent = 'Pause';
-  } else if (isPlaying) {
-    musicPlayer.pause();
-    isPlaying = false;
-    btnPlayPause.textContent = 'Play';
-  }
+  playPauseMedia();
 });
 
 // Starta låt från sökresultat eller queue.
-document.addEventListener('click', async function (e) {
-  if (e.target.classList.contains('btn__playsong')) {
-    let songId = e.target.dataset['id'];
-    displaySongDetails(songId);
-    musicPlayer.load();
-    await musicPlayer.play();
-    totalPlayTime = Math.round(musicPlayer.duration);
-    totalTimeEl.textContent = totalPlayTime;
-    startTimer();
-    btnPlayPause.textContent = 'Pause';
-    isPlaying = true;
-  } else if (e.target.classList.contains('btn__queuesong')) {
-    addToQueue(e.target.dataset['id']);
-  }
+document.addEventListener('click', function (e) {
+  playSongFromList(e);
 });
 
 // Volym (Ska slås ihop med play/pause eventlistner med hjälp av bubbling event senare.)
@@ -129,7 +108,33 @@ function removeSearchResults() {
   });
 }
 
-function playSongFromSearchResults() {}
+async function playSongFromList(e) {
+  if (e.target.classList.contains('btn__playsong')) {
+    let songId = e.target.dataset['id'];
+    displaySongDetails(songId);
+    musicPlayer.load();
+    await musicPlayer.play();
+    totalPlayTime = Math.round(musicPlayer.duration);
+    totalTimeEl.textContent = totalPlayTime;
+    startTimer();
+    btnPlayPause.textContent = 'Pause';
+    isPlaying = true;
+  } else if (e.target.classList.contains('btn__queuesong')) {
+    addToQueue(e.target.dataset['id']);
+  }
+}
+
+function playPauseMedia() {
+  if (!isPlaying) {
+    musicPlayer.play();
+    isPlaying = true;
+    btnPlayPause.textContent = 'Pause';
+  } else if (isPlaying) {
+    musicPlayer.pause();
+    isPlaying = false;
+    btnPlayPause.textContent = 'Play';
+  }
+}
 
 function displaySongDetails(songId) {
   musicPlayerSrc.src = searchResult[songId].preview_url;
@@ -142,12 +147,9 @@ let queueIndex = 0;
 
 function addToQueue(songIndex) {
   console.log(songIndex);
-  // queueList.push(searchResult[songIndex]);
   queueList.push(searchResult[songIndex]);
-  console.log(queueList);
   displayQueue(queueIndex);
   queueIndex++;
-  console.log(queueIndex);
   return;
 }
 
