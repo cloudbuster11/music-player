@@ -5,6 +5,11 @@ import {
   displaySelectedSongDetails,
   displayQueue,
 } from './modules/display.js';
+import {
+  playPauseMedia,
+  volumeControl,
+  startTimer,
+} from './modules/musicPlayer.js';
 
 const searchResultEl = document.querySelector('.search__result');
 const inputField = document.querySelector('.searchbar__inputfield');
@@ -13,23 +18,15 @@ const btnPlayPause = document.querySelector('.btn__playpause');
 const musicPlayer = document.querySelector('.music_player');
 const musicPlayerSrc = document.querySelector('source');
 
-const volumeEl = document.querySelector('.volume__display');
 const mediaPlayerCont = document.querySelector(
   '.mediaplayer__container'
 );
-let currentTimeEl = document.querySelector('.tracktime__playing');
-let totalTimeEl = document.querySelector('.tracktime__totaltime');
 
-let currentPlayTime;
-let totalPlayTime;
-let timer = 0;
 let isPlaying = false;
 let searchResult = [];
 let inputSearchField = '';
 
 let queueList = [];
-
-volumeEl.textContent = `${Math.floor(musicPlayer.volume * 10)}`;
 
 // Sökfältet
 btnSearch.addEventListener('click', async () => {
@@ -42,7 +39,8 @@ btnSearch.addEventListener('click', async () => {
 
 // Play/Pause Mediaplayer
 btnPlayPause.addEventListener('click', () => {
-  playPauseMedia();
+  console.log('Button pressed');
+  isPlaying = playPauseMedia(isPlaying, musicPlayer, btnPlayPause);
 });
 
 // Starta låt från sökresultat eller queue.
@@ -52,7 +50,7 @@ document.addEventListener('click', function (e) {
 
 // Volym (Ska slås ihop med play/pause eventlistner med hjälp av bubbling event senare.)
 mediaPlayerCont.addEventListener('click', (e) => {
-  volumeControl(e);
+  volumeControl(e, musicPlayer);
 });
 
 async function playSongFromList(e) {
@@ -61,26 +59,14 @@ async function playSongFromList(e) {
     displaySelectedSongDetails(songId, searchResult);
     musicPlayerSrc.src = searchResult[songId].preview_url;
     musicPlayer.load();
-    await musicPlayer.play();
-    totalPlayTime = Math.round(musicPlayer.duration);
-    totalTimeEl.textContent = totalPlayTime;
-    startTimer();
-    btnPlayPause.textContent = 'Pause';
-    isPlaying = true;
+    isPlaying = await playPauseMedia(
+      false,
+      musicPlayer,
+      btnPlayPause
+    );
+    startTimer(musicPlayer);
   } else if (e.target.classList.contains('btn__queuesong')) {
     addToQueue(e.target.dataset['id']);
-  }
-}
-
-function playPauseMedia() {
-  if (!isPlaying) {
-    musicPlayer.play();
-    isPlaying = true;
-    btnPlayPause.textContent = 'Pause';
-  } else if (isPlaying) {
-    musicPlayer.pause();
-    isPlaying = false;
-    btnPlayPause.textContent = 'Play';
   }
 }
 
@@ -93,28 +79,4 @@ function addToQueue(songIndex) {
   displayQueue(queueIndex, queueList);
   queueIndex++;
   return;
-}
-
-function volumeControl(e) {
-  if (e.target.classList.contains('btn-volumeup')) {
-    if (musicPlayer.volume < 1.0) {
-      musicPlayer.volume = musicPlayer.volume + 0.1;
-      volumeEl.textContent = `${Math.floor(musicPlayer.volume * 10)}`;
-    } else return;
-  } else if (e.target.classList.contains('btn-volumedown')) {
-    if (musicPlayer.volume > 0.01) {
-      musicPlayer.volume = musicPlayer.volume - 0.1;
-      volumeEl.textContent = `${Math.floor(musicPlayer.volume * 10)}`;
-    } else return;
-  }
-}
-
-function updateTimer() {
-  currentPlayTime = Math.round(musicPlayer.currentTime);
-  currentTimeEl.textContent = currentPlayTime;
-}
-
-function startTimer() {
-  timer = setInterval(updateTimer, 1000);
-  updateTimer();
 }
