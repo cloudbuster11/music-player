@@ -1,26 +1,19 @@
 import { getToken, searchSong } from './modules/api.js';
+import {
+  displaySearchResults,
+  removeSearchResults,
+  displaySelectedSongDetails,
+  displayQueue,
+} from './modules/display.js';
+
 const searchResultEl = document.querySelector('.search__result');
 const inputField = document.querySelector('.searchbar__inputfield');
 const btnSearch = document.querySelector('.btn__search');
 const btnPlayPause = document.querySelector('.btn__playpause');
 const musicPlayer = document.querySelector('.music_player');
 const musicPlayerSrc = document.querySelector('source');
-const playingAlbumArtEl = document.querySelector(
-  '.currenttrack__almbumart'
-);
-const addToQueueBtn = document.querySelector('.btn__queuesong');
-const queueListEl = document.querySelector('.queue__list');
 
-const playingArtistEl = document.querySelector(
-  '.currenttrack__artist'
-);
-const playingTitleEl = document.querySelector('.currenttrack__title');
-const volumeUpBtn = document.querySelector('.btn-volumeup');
-const volumeDownBtn = document.querySelector('.btn-volumedown');
 const volumeEl = document.querySelector('.volume__display');
-const musicPlayerContainer = document.querySelector(
-  '.playercontrolls__container'
-);
 const mediaPlayerCont = document.querySelector(
   '.mediaplayer__container'
 );
@@ -40,12 +33,11 @@ volumeEl.textContent = `${Math.floor(musicPlayer.volume * 10)}`;
 
 // Sökfältet
 btnSearch.addEventListener('click', async () => {
-  removeSearchResults();
+  removeSearchResults(searchResult);
   await getToken();
-  console.log('test');
   inputSearchField = inputField.value;
   searchResult = await searchSong(inputSearchField);
-  displaySearchResults();
+  displaySearchResults(searchResult, searchResultEl);
 });
 
 // Play/Pause Mediaplayer
@@ -63,33 +55,11 @@ mediaPlayerCont.addEventListener('click', (e) => {
   volumeControl(e);
 });
 
-function displaySearchResults() {
-  for (let i = 0; i < searchResult.length; i++) {
-    const renderArtist = `<article class="result__container ${i}">
-    <h4 class="result__artist">${searchResult[i].artists[0].name}</h4>
-    <p class="result__songtitle">${searchResult[i].name}</p>
-    <p class="result__albumname">${searchResult[i].album.name}</p>
-    <img class="result__albumcover" src="${searchResult[i].album.images[1].url}"/>
-    <button class="btn__playsong btn__result" data-id="${i}">Play Song</button><button class="btn__queuesong btn__result" data-id="${i}">Queue</button>
-    </article>`;
-    searchResultEl.innerHTML += renderArtist;
-  }
-}
-
-function removeSearchResults() {
-  const renderedResults = document.querySelectorAll(
-    '.result__container'
-  );
-  searchResult = [];
-  renderedResults.forEach((el) => {
-    el.remove();
-  });
-}
-
 async function playSongFromList(e) {
   if (e.target.classList.contains('btn__playsong')) {
     let songId = e.target.dataset['id'];
-    displaySongDetails(songId);
+    displaySelectedSongDetails(songId, searchResult);
+    musicPlayerSrc.src = searchResult[songId].preview_url;
     musicPlayer.load();
     await musicPlayer.play();
     totalPlayTime = Math.round(musicPlayer.duration);
@@ -114,31 +84,15 @@ function playPauseMedia() {
   }
 }
 
-function displaySongDetails(songId) {
-  musicPlayerSrc.src = searchResult[songId].preview_url;
-  playingArtistEl.textContent = searchResult[songId].artists[0].name;
-  playingTitleEl.textContent = searchResult[songId].name;
-  playingAlbumArtEl.src = searchResult[songId].album.images[1].url;
-}
 // Måste hitta annan lösning på nedan
 let queueIndex = 0;
 
 function addToQueue(songIndex) {
   console.log(songIndex);
   queueList.push(searchResult[songIndex]);
-  displayQueue(queueIndex);
+  displayQueue(queueIndex, queueList);
   queueIndex++;
   return;
-}
-
-function displayQueue(songIndex) {
-  console.log(songIndex);
-  let renderQueue = `<article class="queue__container ${songIndex}">
-    <h4 class="queue__artist">${queueList[songIndex].artists[0].name}</h4>
-    <p class="queue__songtitle">${queueList[songIndex].name}</p>
-    <button class="btn__playsong btn__result" data-id="${songIndex}">Play Song</button>
-    </article>`;
-  queueListEl.innerHTML += renderQueue;
 }
 
 function volumeControl(e) {
