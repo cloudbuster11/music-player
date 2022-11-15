@@ -22,8 +22,6 @@ async function searchSong(inputSearchField) {
     }
   );
   let data = await response.json();
-  searchResult = data.tracks.items;
-  console.log(searchResult);
-  displaySearchResults();
-  return;
+
+  return data.tracks.items;
 }

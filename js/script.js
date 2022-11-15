@@ -31,7 +31,7 @@ let currentPlayTime;
 let totalPlayTime;
 let timer = 0;
 let isPlaying = false;
-// let searchResult = [];
+let searchResult = [];
 let inputSearchField = '';
 
 let queueList = [];
@@ -44,7 +44,8 @@ btnSearch.addEventListener('click', async () => {
   await getToken();
   console.log('test');
   inputSearchField = inputField.value;
-  searchSong(inputSearchField);
+  searchResult = await searchSong(inputSearchField);
+  displaySearchResults();
 });
 
 // Play/Pause Mediaplayer
