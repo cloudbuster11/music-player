@@ -34,7 +34,7 @@ body {
   justify-content: center;
 }
 
-.search__field {
+.searchbar__inputfield {
   /* width: 100%; */
   padding: 10px 35px 10px 15px;
   border: none;
@@ -45,13 +45,13 @@ body {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
-.button__search {
+.btn__search {
   background: transparent;
   border: none;
   outline: none;
   margin-left: -33px;
 }
-.button__search img {
+.btn__search img {
   width: 20px;
   height: 20px;
   object-fit: cover;
@@ -129,7 +129,7 @@ body {
   flex-direction: column;
 }
 
-.mediaplayer__albumart {
+.mediaplayer__currenttrack {
   background-color: #000000;
   justify-content: center;
   align-items: center;
@@ -139,7 +139,7 @@ body {
   grid-template-areas: 'img artistinfo volumecontrolls';
 }
 
-.albumart__img {
+.currenttrack__almbumart {
   grid-area: img;
   height: 120px;
   width: 120px;
@@ -152,11 +152,11 @@ body {
   z-index: 2;
 }
 
-.artist__info {
+.currenttrack__info {
   grid-area: artistinfo;
 }
 
-.player__container {
+.playercontrolls__container {
   background-color: #181818;
   position: relative;
   top: -15px;
@@ -174,32 +174,32 @@ body {
     0 1.6vh 1.25vw rgb(0 0 0 / 35%), 0.02vw -0.1vh rgb(56 56 56 / 51%);
 }
 
-.song {
+.currenttrack__title {
   color: #ffffff;
   font-size: 0.8rem;
 }
 
-.artist {
+.currenttrack__artist {
   color: #afafaf;
   font-weight: 500;
   /* margin-bottom: 0.5rem; */
 }
 
-.song_time {
+.tracktime__container {
   display: flex;
   color: #9b9b9b;
 }
-.time {
+.tracktime__playing,
+.tracktime__totaltime {
   font-size: 0.7rem;
   font-weight: 500;
 }
 
-.time__backslash {
+.tracktime__slashback {
   margin: 0 0.2rem;
 }
 
-.volume__container {
-  display: flex;
+.volume__display {
   color: #9b9b9b;
   font-size: 0.7rem;
 }
@@ -213,18 +213,18 @@ body {
   padding-right: 0.2rem;
 }
 
-.btn--volume {
+.btn__volume {
   background-color: #000000;
   color: #b3b3b3;
   border: none;
   font-size: 1.5rem;
 }
 
-.btn--volume:hover {
+.btn__volume:hover {
   color: #fff;
 }
 
-.btn--playpause {
+.btn__playpause {
   height: 40px;
   width: 60px;
   font-weight: 500;
@@ -235,12 +235,12 @@ body {
   margin: 0 1rem;
 }
 
-.btn--playpause:hover {
+.btn__playpause:hover {
   filter: brightness(1.08) saturate(1.03);
   box-shadow: 0 1px #222222;
 }
 
-.btn--grey {
+.btn-grey {
   border: none;
   background-color: #181818;
   color: #b3b3b3;

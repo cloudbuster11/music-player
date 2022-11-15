@@ -14,10 +14,10 @@
     <div class="wrapper">
       <nav class="searchbar">
         <input
-          class="search__field"
+          class="searchbar__inputfield"
           placeholder="Search for tracks"
         />
-        <button class="button__search">
+        <button class="btn__search">
           <img src="./images/magnify.png" />
         </button>
       </nav>
@@ -27,44 +27,39 @@
 
       <!-- Gör om senare -->
       <section class="mediaplayer__container">
-        <article class="mediaplayer__albumart">
+        <article class="mediaplayer__currenttrack">
           <img
-            class="albumart__img"
+            class="currenttrack__almbumart"
             src="images/default_album_cover.jpg"
             alt=""
           />
-          <section class="artist__info">
-            <p class="song">Song Title</p>
-            <p class="artist">Artist</p>
-            <aside class="song_time">
-              <p class="current__time time">00</p>
-              <p class="time__backslash">/</p>
-              <p class="total__time time">00</p>
-            </aside>
-            <aside class="volume__container">
-              <p class="show__volume">10</p>
+          <section class="currenttrack__info">
+            <p class="currenttrack__title">Song Title</p>
+            <p class="currenttrack__artist">Artist</p>
+            <aside class="tracktime__container">
+              <p class="tracktime__playing">00</p>
+              <p class="tracktime__slashback">/</p>
+              <p class="tracktime__totaltime">00</p>
             </aside>
           </section>
           <aside class="volume__controlls">
-            <button class="volumeup btn--volume">+</button>
-            <button class="volumedown btn--volume">-</button>
+            <button class="btn__volume btn-volumeup">+</button>
+            <p class="volume__display">10</p>
+            <button class="btn__volume btn-volumedown">-</button>
           </aside>
         </article>
 
-        <article class="player__container">
+        <article class="playercontrolls__container">
           <audio class="music_player">
             <source src="" type="audio/mpeg" />
           </audio>
-          <button class="btn--prev btn--grey">Prev</button>
-          <button class="btn--playpause">Play</button>
-          <button class="btn--next btn--grey">Next</button>
-
-          <!-- <button class="btn--play"></button> -->
+          <button class="btn__prev btn-grey">Prev</button>
+          <button class="btn__playpause">Play</button>
+          <button class="btn__next btn-grey">Next</button>
         </article>
       </section>
     </div>
 
-    <script src="js/script.js"></script>
-    <!-- <script src="js/domelem.js"></script> -->
+    <script type="module" src="js/script.js"></script>
   </body>
 </html>

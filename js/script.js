@@ -1,46 +1,50 @@
+import { getToken, searchSong } from './modules/api.js';
 const searchResultEl = document.querySelector('.search__result');
-const inputField = document.querySelector('.search__field');
-const btnSearch = document.querySelector('.button__search');
-const btnPlayPause = document.querySelector('.btn--playpause');
+const inputField = document.querySelector('.searchbar__inputfield');
+const btnSearch = document.querySelector('.btn__search');
+const btnPlayPause = document.querySelector('.btn__playpause');
 const musicPlayer = document.querySelector('.music_player');
 const musicPlayerSrc = document.querySelector('source');
-const playingAlbumArtEl = document.querySelector('.albumart__img');
+const playingAlbumArtEl = document.querySelector(
+  '.currenttrack__almbumart'
+);
 const addToQueueBtn = document.querySelector('.btn__queuesong');
 const queueListEl = document.querySelector('.queue__list');
 
-const playingArtistEl = document.querySelector('.artist');
-const playingTitleEl = document.querySelector('.song');
-const volumeUpBtn = document.querySelector('.volumeup');
-const volumeDownBtn = document.querySelector('.volumedown');
-const volumeEl = document.querySelector('.show__volume');
+const playingArtistEl = document.querySelector(
+  '.currenttrack__artist'
+);
+const playingTitleEl = document.querySelector('.currenttrack__title');
+const volumeUpBtn = document.querySelector('.btn-volumeup');
+const volumeDownBtn = document.querySelector('.btn-volumedown');
+const volumeEl = document.querySelector('.volume__display');
 const musicPlayerContainer = document.querySelector(
-  '.player__container'
+  '.playercontrolls__container'
 );
 const mediaPlayerCont = document.querySelector(
   '.mediaplayer__container'
 );
-let currentTimeEl = document.querySelector('.current__time');
-let totalTimeEl = document.querySelector('.total__time');
+let currentTimeEl = document.querySelector('.tracktime__playing');
+let totalTimeEl = document.querySelector('.tracktime__totaltime');
 
 let currentPlayTime;
 let totalPlayTime;
 let timer = 0;
 let isPlaying = false;
-let searchResult = [];
+// let searchResult = [];
 let inputSearchField = '';
-let token = '';
+
 let queueList = [];
 
-volumeEl.textContent = `Volume: ${Math.floor(
-  musicPlayer.volume * 10
-)}`;
+volumeEl.textContent = `${Math.floor(musicPlayer.volume * 10)}`;
 
 // Sökfältet
 btnSearch.addEventListener('click', async () => {
   removeSearchResults();
   await getToken();
+  console.log('test');
   inputSearchField = inputField.value;
-  searchSong();
+  searchSong(inputSearchField);
 });
 
 // Play/Pause Mediaplayer
@@ -57,33 +61,6 @@ document.addEventListener('click', function (e) {
 mediaPlayerCont.addEventListener('click', (e) => {
   volumeControl(e);
 });
-
-async function getToken() {
-  const response = await fetch(
-    `https://blooming-reef-63913.herokuapp.com/api/token`
-  );
-  data = await response.json();
-  token = data.token;
-  return token;
-}
-
-async function searchSong() {
-  const response = await fetch(
-    `https://api.spotify.com/v1/search?q=track%3A${inputSearchField}&type=track&limit=10`,
-    {
-      headers: {
-        Accept: 'application / json',
-        'Content-Type': 'application / json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  data = await response.json();
-  searchResult = data.tracks.items;
-  console.log(searchResult);
-  displaySearchResults();
-  return;
-}
 
 function displaySearchResults() {
   for (let i = 0; i < searchResult.length; i++) {
@@ -164,19 +141,15 @@ function displayQueue(songIndex) {
 }
 
 function volumeControl(e) {
-  if (e.target.classList.contains('volumeup')) {
+  if (e.target.classList.contains('btn-volumeup')) {
     if (musicPlayer.volume < 1.0) {
       musicPlayer.volume = musicPlayer.volume + 0.1;
-      volumeEl.textContent = `Volume: ${Math.floor(
-        musicPlayer.volume * 10
-      )}`;
+      volumeEl.textContent = `${Math.floor(musicPlayer.volume * 10)}`;
     } else return;
-  } else if (e.target.classList.contains('volumedown')) {
+  } else if (e.target.classList.contains('btn-volumedown')) {
     if (musicPlayer.volume > 0.01) {
       musicPlayer.volume = musicPlayer.volume - 0.1;
-      volumeEl.textContent = `Volume: ${Math.floor(
-        musicPlayer.volume * 10
-      )}`;
+      volumeEl.textContent = `${Math.floor(musicPlayer.volume * 10)}`;
     } else return;
   }
 }
