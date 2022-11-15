@@ -12,7 +12,8 @@ audio::-webkit-media-controls-panel {
 
 body {
   font-family: sans-serif;
-  font-family: 'Montserrat', san;
+  font-family: 'Montserrat', san-serif;
+  background-color: #e8e8e8;
 }
 
 .wrapper {
@@ -112,12 +113,43 @@ body {
   grid-area: btn__play;
 }
 
-.btn__quesong {
+.queue__container {
+  display: flex;
+}
+
+.btn__playqueue {
+  border-radius: 1rem;
+  border: none;
+}
+
+.btn__queuesong {
   grid-area: btn__que;
 }
 
 .queue__list {
   grid-area: queuelist;
+  list-style: none;
+}
+
+.queue__song {
+  display: flex;
+}
+
+.queue__song:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+.btn__removequeue {
+  /* padding: 0 0.2rem; */
+  height: 1rem;
+  width: 1rem;
+  align-self: center;
+  margin-left: 0.4rem;
+  background-color: #cf142b;
+  color: #fff;
+  font-size: 0.6rem;
+  border-radius: 100rem;
+  border: none;
 }
 
 .mediaplayer__container {
@@ -169,7 +201,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #38393a;
+  /* border: 1px solid #38393a; */
   box-shadow: 0 0.75vh 0.5vw rgb(0 0 0 / 20%),
     0 1.6vh 1.25vw rgb(0 0 0 / 35%), 0.02vw -0.1vh rgb(56 56 56 / 51%);
 }

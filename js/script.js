@@ -4,6 +4,7 @@ import {
   removeSearchResults,
   displaySelectedSongDetails,
   displayQueue,
+  removeFromQueue,
 } from './modules/display.js';
 import {
   playPauseMedia,
@@ -25,7 +26,6 @@ const mediaPlayerCont = document.querySelector(
 let isPlaying = false;
 let searchResult = [];
 let inputSearchField = '';
-
 let queueList = [];
 
 // Sökfältet
@@ -45,6 +45,10 @@ btnPlayPause.addEventListener('click', () => {
 
 // Starta låt från sökresultat eller queue.
 document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('btn__removequeue')) {
+    let songId = e.target.dataset['id'];
+    removeFromQueue(songId, queueList);
+  }
   playSongFromList(e);
 });
 
@@ -54,9 +58,13 @@ mediaPlayerCont.addEventListener('click', (e) => {
 });
 
 async function playSongFromList(e) {
+  let songId = e.target.dataset['id'];
+
   if (e.target.classList.contains('btn__playsong')) {
-    let songId = e.target.dataset['id'];
+    queueList.unshift(searchResult[songId]);
     displaySelectedSongDetails(songId, searchResult);
+    displayQueue(queueList);
+    console.log(queueList);
     musicPlayerSrc.src = searchResult[songId].preview_url;
     musicPlayer.load();
     isPlaying = await playPauseMedia(
@@ -66,17 +74,13 @@ async function playSongFromList(e) {
     );
     startTimer(musicPlayer);
   } else if (e.target.classList.contains('btn__queuesong')) {
-    addToQueue(e.target.dataset['id']);
+    addToQueue(songId);
   }
 }
-
-// Måste hitta annan lösning på nedan
-let queueIndex = 0;
 
 function addToQueue(songIndex) {
   console.log(songIndex);
   queueList.push(searchResult[songIndex]);
-  displayQueue(queueIndex, queueList);
-  queueIndex++;
+  displayQueue(queueList);
   return;
 }

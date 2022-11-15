@@ -3,6 +3,7 @@ export {
   removeSearchResults,
   displaySelectedSongDetails,
   displayQueue,
+  removeFromQueue,
 };
 
 const playingArtistEl = document.querySelector(
@@ -43,12 +44,31 @@ function displaySelectedSongDetails(songId, searchResult) {
   playingAlbumArtEl.src = searchResult[songId].album.images[1].url;
 }
 
-function displayQueue(songIndex, queueList) {
-  console.log(songIndex);
-  let renderQueue = `<article class="queue__container ${songIndex}">
-    <h4 class="queue__artist">${queueList[songIndex].artists[0].name}</h4>
-    <p class="queue__songtitle">${queueList[songIndex].name}</p>
-    <button class="btn__playsong btn__result" data-id="${songIndex}">Play Song</button>
-    </article>`;
-  queueListEl.innerHTML += renderQueue;
+function displayQueue(queueList) {
+  const renderedQueueResults =
+    document.querySelectorAll('.queue__song');
+  renderedQueueResults.forEach((el) => {
+    el.remove();
+  });
+
+  for (let i = 0; i < queueList.length; i++) {
+    console.log(`${queueList[i].artists[0].name}`);
+    let renderQueue = `<li class="queue__song ${i}" data-id="${i}">${queueList[i].artists[0].name} - ${queueList[i].name}
+    <button class="btn__removequeue" data-id="${i}">X</button></li>`;
+    queueListEl.innerHTML += renderQueue;
+  }
+}
+
+function removeFromQueue(songId, queueList) {
+  queueList.splice(songId, 1);
+  console.log(songId);
+  const renderedQueueResults =
+    document.querySelectorAll('.queue__song');
+
+  // songId kan vara högre än vad renderedQueueResults.length... Nej id o i matchar inte när man raderat några.
+  for (let i = 0; i < renderedQueueResults.length; i++) {
+    if (renderedQueueResults[i] === renderedQueueResults[songId]) {
+      renderedQueueResults[songId].remove();
+    }
+  }
 }
