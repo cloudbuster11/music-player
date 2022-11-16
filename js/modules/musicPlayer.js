@@ -7,15 +7,15 @@ let totalTimeEl = document.querySelector('.tracktime__totaltime');
 let totalPlayTime;
 let timer = 0;
 
-async function playPauseMedia(isPlaying, musicPlayer, btnPlayPause) {
+function playPauseMedia(isPlaying, musicPlayer, btnPlayPause) {
   if (!isPlaying) {
-    await musicPlayer.play();
     isPlaying = true;
+    musicPlayer.play();
     btnPlayPause.textContent = 'Pause';
     return isPlaying;
   } else if (isPlaying) {
-    musicPlayer.pause();
     isPlaying = false;
+    musicPlayer.pause();
     btnPlayPause.textContent = 'Play';
     return isPlaying;
   }

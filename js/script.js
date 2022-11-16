@@ -39,7 +39,6 @@ btnSearch.addEventListener('click', async () => {
 
 // Play/Pause Mediaplayer
 btnPlayPause.addEventListener('click', () => {
-  console.log('Button pressed');
   isPlaying = playPauseMedia(isPlaying, musicPlayer, btnPlayPause);
 });
 
@@ -64,7 +63,7 @@ async function playSongFromList(e) {
     queueList.unshift(searchResult[songId]);
     displaySelectedSongDetails(songId, searchResult);
     displayQueue(queueList);
-    console.log(queueList);
+    // console.log(queueList);
     musicPlayerSrc.src = searchResult[songId].preview_url;
     musicPlayer.load();
     isPlaying = await playPauseMedia(
@@ -79,7 +78,7 @@ async function playSongFromList(e) {
 }
 
 function addToQueue(songIndex) {
-  console.log(songIndex);
+  // console.log(songIndex);
   queueList.push(searchResult[songIndex]);
   displayQueue(queueList);
   return;

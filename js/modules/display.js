@@ -52,7 +52,6 @@ function displayQueue(queueList) {
   });
 
   for (let i = 0; i < queueList.length; i++) {
-    console.log(`${queueList[i].artists[0].name}`);
     let renderQueue = `<li class="queue__song ${i}" data-id="${i}">${queueList[i].artists[0].name} - ${queueList[i].name}
     <button class="btn__removequeue" data-id="${i}">X</button></li>`;
     queueListEl.innerHTML += renderQueue;
@@ -61,14 +60,6 @@ function displayQueue(queueList) {
 
 function removeFromQueue(songId, queueList) {
   queueList.splice(songId, 1);
-  console.log(songId);
-  const renderedQueueResults =
-    document.querySelectorAll('.queue__song');
 
-  // songId kan vara högre än vad renderedQueueResults.length... Nej id o i matchar inte när man raderat några.
-  for (let i = 0; i < renderedQueueResults.length; i++) {
-    if (renderedQueueResults[i] === renderedQueueResults[songId]) {
-      renderedQueueResults[songId].remove();
-    }
-  }
+  displayQueue(queueList);
 }
