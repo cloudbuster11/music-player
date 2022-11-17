@@ -1,4 +1,9 @@
-export { playPauseMedia, volumeControl, startTimer };
+export {
+  playPauseMedia,
+  volumeControl,
+  startTimer,
+  nextPrevSongQueue,
+};
 
 const volumeEl = document.querySelector('.volume__display');
 let currentTimeEl = document.querySelector('.tracktime__playing');
@@ -19,6 +24,16 @@ function playPauseMedia(isPlaying, musicPlayer, btnPlayPause) {
     btnPlayPause.textContent = 'Play';
     return isPlaying;
   }
+}
+
+function nextPrevSongQueue(status, playingSongIndex) {
+  if (status) {
+    playingSongIndex++;
+    return playingSongIndex;
+  } else if (!status && playingSongIndex > 0) {
+    playingSongIndex--;
+    return playingSongIndex;
+  } else alert('No previous song in queue.');
 }
 
 function volumeControl(e, musicPlayer) {

@@ -4,6 +4,7 @@ export {
   displaySelectedSongDetails,
   displayQueue,
   removeFromQueue,
+  toggleActiveSongClass,
 };
 
 const playingArtistEl = document.querySelector(
@@ -44,7 +45,8 @@ function displaySelectedSongDetails(songId, searchResult) {
   playingAlbumArtEl.src = searchResult[songId].album.images[1].url;
 }
 
-function displayQueue(queueList) {
+function displayQueue(queueList, playingSongIndex) {
+  // let playIndex = playingSongIndex;
   const renderedQueueResults =
     document.querySelectorAll('.queue__song');
   renderedQueueResults.forEach((el) => {
@@ -56,10 +58,22 @@ function displayQueue(queueList) {
     <button class="btn__removequeue" data-id="${i}">X</button></li>`;
     queueListEl.innerHTML += renderQueue;
   }
+  // toggleActiveSongClass(playIndex);
 }
 
 function removeFromQueue(songId, queueList) {
   queueList.splice(songId, 1);
 
   displayQueue(queueList);
+}
+
+function toggleActiveSongClass(playingSongIndex) {
+  console.log(playingSongIndex);
+  let songs = document.querySelectorAll('.queue__song');
+
+  songs[playingSongIndex].classList.add('song-active');
+
+  // classList.add('song__active')
+
+  // Kolla om data-id är samma som songId då lägg till song-active class
 }

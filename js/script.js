@@ -5,11 +5,13 @@ import {
   displaySelectedSongDetails,
   displayQueue,
   removeFromQueue,
+  toggleActiveSongClass,
 } from './modules/display.js';
 import {
   playPauseMedia,
   volumeControl,
   startTimer,
+  nextPrevSongQueue,
 } from './modules/musicPlayer.js';
 
 const searchResultEl = document.querySelector('.search__result');
@@ -27,6 +29,7 @@ let isPlaying = false;
 let searchResult = [];
 let inputSearchField = '';
 let queueList = [];
+let playingSongIndex;
 
 // Sökfältet
 btnSearch.addEventListener('click', async () => {
@@ -44,11 +47,25 @@ btnPlayPause.addEventListener('click', () => {
 
 // Starta låt från sökresultat eller queue.
 document.addEventListener('click', function (e) {
+  let songId = e.target.dataset['id'];
   if (e.target.classList.contains('btn__removequeue')) {
-    let songId = e.target.dataset['id'];
     removeFromQueue(songId, queueList);
+  } else if (e.target.classList.contains('btn__playsong')) {
+    playSongFromList(songId);
+  } else if (e.target.classList.contains('btn__queuesong')) {
+    addToQueue(songId);
+  } else if (
+    e.target.classList.contains('btn__next') ||
+    e.target.classList.contains('btn__prev')
+  ) {
+    if (e.target.classList.contains('btn__next')) {
+      let songId = nextPrevSongQueue(true, playingSongIndex);
+      playSongFromQueue(songId);
+    } else if (e.target.classList.contains('btn__prev')) {
+      let songId = nextPrevSongQueue(false, playingSongIndex);
+      playSongFromQueue(songId);
+    }
   }
-  playSongFromList(e);
 });
 
 // Volym (Ska slås ihop med play/pause eventlistner med hjälp av bubbling event senare.)
@@ -56,30 +73,36 @@ mediaPlayerCont.addEventListener('click', (e) => {
   volumeControl(e, musicPlayer);
 });
 
-async function playSongFromList(e) {
-  let songId = e.target.dataset['id'];
+function playSongFromList(songId) {
+  queueList.unshift(searchResult[songId]);
+  playingSongIndex = 0;
+  displaySelectedSongDetails(songId, searchResult);
+  displayQueue(queueList, playingSongIndex);
+  toggleActiveSongClass(playingSongIndex);
+  musicPlayerSrc.src = queueList[0].preview_url;
+  // toggleActiveSongClass(playingSongIndex);
+  // musicPlayerSrc.src = searchResult[songId].preview_url;
+  musicPlayer.load();
+  isPlaying = playPauseMedia(false, musicPlayer, btnPlayPause);
+  startTimer(musicPlayer);
+}
 
-  if (e.target.classList.contains('btn__playsong')) {
-    queueList.unshift(searchResult[songId]);
-    displaySelectedSongDetails(songId, searchResult);
-    displayQueue(queueList);
-    // console.log(queueList);
-    musicPlayerSrc.src = searchResult[songId].preview_url;
-    musicPlayer.load();
-    isPlaying = await playPauseMedia(
-      false,
-      musicPlayer,
-      btnPlayPause
-    );
-    startTimer(musicPlayer);
-  } else if (e.target.classList.contains('btn__queuesong')) {
-    addToQueue(songId);
-  }
+function playSongFromQueue(songId) {
+  playingSongIndex = songId;
+  displaySelectedSongDetails(songId, queueList);
+  displayQueue(queueList, playingSongIndex);
+  musicPlayerSrc.src = queueList[songId].preview_url;
+  // toggleActiveSongClass(playingSongIndex);
+  musicPlayer.load();
+  isPlaying = playPauseMedia(false, musicPlayer, btnPlayPause);
+  toggleActiveSongClass(playingSongIndex);
+  startTimer(musicPlayer);
 }
 
 function addToQueue(songIndex) {
   // console.log(songIndex);
   queueList.push(searchResult[songIndex]);
   displayQueue(queueList);
+  toggleActiveSongClass(playingSongIndex);
   return;
 }
