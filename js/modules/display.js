@@ -61,15 +61,17 @@ function displayQueue(queueList, playingSongIndex) {
   // toggleActiveSongClass(playIndex);
 }
 
-function removeFromQueue(songId, queueList) {
-  queueList.splice(songId, 1);
-
-  displayQueue(queueList);
+function removeFromQueue(songId, queueList, playingSongIndex) {
+  console.log(songId, playingSongIndex);
+  if (songId == playingSongIndex) {
+    return;
+  } else {
+    queueList.splice(songId, 1);
+    displayQueue(queueList);
+  }
 }
 
 function toggleActiveSongClass(playingSongIndex) {
-  // console.log(playingSongIndex);
-
   if (playingSongIndex === undefined) return;
   else {
     let songs = document.querySelectorAll('.queue__song');

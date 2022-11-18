@@ -50,7 +50,7 @@ btnPlayPause.addEventListener('click', () => {
 document.addEventListener('click', function (e) {
   let songId = e.target.dataset['id'];
   if (e.target.classList.contains('btn__removequeue')) {
-    removeFromQueue(songId, queueList);
+    removeFromQueue(songId, queueList, playingSongIndex);
   } else if (e.target.classList.contains('btn__playsong')) {
     playSongFromList(songId);
   } else if (e.target.classList.contains('btn__queuesong')) {
