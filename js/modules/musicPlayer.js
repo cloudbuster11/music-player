@@ -29,11 +29,13 @@ function playPauseMedia(isPlaying, musicPlayer, btnPlayPause) {
 function nextPrevSongQueue(status, playingSongIndex) {
   if (status) {
     playingSongIndex++;
+    console.log(playingSongIndex);
     return playingSongIndex;
-  } else if (!status && playingSongIndex > 0) {
+  } else if (!status && playingSongIndex >= 1) {
     playingSongIndex--;
+    console.log(playingSongIndex);
     return playingSongIndex;
-  } else alert('No previous song in queue.');
+  } else return playingSongIndex;
 }
 
 function volumeControl(e, musicPlayer) {

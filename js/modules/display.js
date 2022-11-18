@@ -68,12 +68,11 @@ function removeFromQueue(songId, queueList) {
 }
 
 function toggleActiveSongClass(playingSongIndex) {
-  console.log(playingSongIndex);
-  let songs = document.querySelectorAll('.queue__song');
+  // console.log(playingSongIndex);
 
-  songs[playingSongIndex].classList.add('song-active');
-
-  // classList.add('song__active')
-
-  // Kolla om data-id är samma som songId då lägg till song-active class
+  if (playingSongIndex === undefined) return;
+  else {
+    let songs = document.querySelectorAll('.queue__song');
+    songs[playingSongIndex].classList.add('song-active');
+  }
 }

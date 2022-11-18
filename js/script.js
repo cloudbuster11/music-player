@@ -30,6 +30,7 @@ let searchResult = [];
 let inputSearchField = '';
 let queueList = [];
 let playingSongIndex;
+// console.log(playingSongIndex);
 
 // Sökfältet
 btnSearch.addEventListener('click', async () => {
